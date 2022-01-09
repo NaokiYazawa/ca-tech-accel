@@ -1,6 +1,6 @@
 ## 基礎課題
 
-- `/ping` で `pong!` がかえるようにしよう
+- `/ping` で `pong` を返すようにしよう
 - ユーザ名の更新処理を追加しよう
 - mysql を導入しよう (database/sql / jmoiron/sqlx / go-gorm/gorm)
 - docker で 開発環境を作ってみよう (multi stage build)
