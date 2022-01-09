@@ -16,7 +16,7 @@ func main() {
 	h.Handle("/user/list", handler.List())
 	h.Handle("/user/find/", handler.Find()) // ex. /user/find/1
 	// TODO: ユーザー名のアップデート処理を追加しよう
-	// TODO: Restfulなパス設計にしよう
+	// TODO: Restful なパス設計にしよう
 
 	srv := http.Server{
 		Addr:    ":8080",
