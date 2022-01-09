@@ -5,6 +5,7 @@ type User struct {
 	Name string `json:"name"`
 }
 
+// TODO: 排他制御しよう
 // TODO: mysqlを導入して永続化しよう
 var userMap = map[int]User{1: {ID: 1, Name: "Naoki Yazawa"}}
 
