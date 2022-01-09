@@ -9,6 +9,7 @@
 ## 発展課題
 
 - テストを書いてみる (TDT, モック, CI)
+- linter を導入する (golangci-lint)
 - [echo](https://echo.labstack.com/)をサーバー構築に使ってみる
 - アーキテクチャを変更する (DDD, クリーンアーキテクチャ, レイヤードアーキテクチャ)
 - パス設計を考察する (REST)
