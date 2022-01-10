@@ -7,11 +7,10 @@
 - docker で 開発環境を作ってみよう (multi stage build)
 
 ## 発展課題
-
-- テストを書いてみる (TDT, モック, CI)
-- linter を導入する (golangci-lint)
 - [echo](https://echo.labstack.com/)をサーバー構築に使ってみる
 - アーキテクチャを変更する (DDD, クリーンアーキテクチャ, レイヤードアーキテクチャ)
+- テストを書いてみる (TDT, モック, CI)
+- linter を導入する (golangci-lint)
 - パス設計を考察する (REST)
 - graceful shutdown に対応する
 - Grpc に置き換える
