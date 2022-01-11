@@ -19,11 +19,11 @@ func Create(name string) (User, error) {
 
 // List ユーザ一覧取得
 func List() ([]User, error) {
-	beasts := make([]User, 0, len(userMap))
+	users := make([]User, 0, len(userMap))
 	for _, v := range userMap {
-		beasts = append(beasts, v)
+		users = append(users, v)
 	}
-	return beasts, nil
+	return users, nil
 }
 
 //　Find ユーザ取得
