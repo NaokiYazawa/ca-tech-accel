@@ -1,3 +1,12 @@
+## 環境構築
+
+```sh
+$ go mod tidy
+$ go run main.go
+
+# 別ターミナル
+$ curl http://localhost:8080/user/list
+```
 ## Todo
 - `/ping` で `pong` を返すようにしよう
 - ユーザ名の更新処理を追加しよう
