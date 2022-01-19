@@ -12,6 +12,7 @@ func Ping() http.HandlerFunc {
 			w.Write([]byte(err.Error()))
 			return
 		}
+		w.Write([]byte("pong"))
 		w.WriteHeader(http.StatusOK)
 	}
 }
