@@ -127,6 +127,65 @@ func Find() http.HandlerFunc {
 	}
 }
 
+// Update ユーザー更新
+func Update() http.HandlerFunc {
+	// 関数を返す
+	return func(w http.ResponseWriter, r *http.Request) {
+		// 遅延評価
+		defer r.Body.Close()
+		// 一括読み込み
+		body, err := ioutil.ReadAll(r.Body)
+		// エラー処理
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(err.Error()))
+			return
+		}
+		var req UserUpdateRequest
+		// json.Marshalは構造体をjsonに変換する
+		if err := json.Unmarshal(body, &req); err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(err.Error()))
+			return
+		}
+		// idを取得
+		sub := strings.TrimPrefix(r.URL.Path, "/user/update")
+		_, id := filepath.Split(sub)
+		userID, err := strconv.Atoi(id)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(err.Error()))
+			return
+		}
+
+		user, err := model.Update(userID, req.Name)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+			return
+		}
+
+		res, err := json.Marshal(
+			UserUpdateResponse{
+				ID:   user.ID,
+				Name: user.Name,
+			},
+		)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+			return
+		}
+		if _, err := w.Write(res); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+	}
+}
+
 type (
 	SignupRequest struct {
 		Name string `json:"name"`
@@ -141,6 +200,16 @@ type (
 	}
 
 	UserFindResponse struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+	}
+
+	UserUpdateRequest struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+	}
+
+	UserUpdateResponse struct {
 		ID   int    `json:"id"`
 		Name string `json:"name"`
 	}
