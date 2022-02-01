@@ -2,11 +2,11 @@ package handler
 
 import (
 	"encoding/json"
+	"io"
 	"path/filepath"
 	"strconv"
 	"strings"
 
-	"io/ioutil"
 	"net/http"
 
 	"github.com/karamaru-alpha/ca-tech-accel/model"
@@ -15,8 +15,7 @@ import (
 // Add 新規ユーザ登録
 func Add() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		defer r.Body.Close()
-		body, err := ioutil.ReadAll(r.Body)
+		body, err := io.ReadAll(r.Body)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte(err.Error()))
@@ -131,10 +130,8 @@ func Find() http.HandlerFunc {
 func Update() http.HandlerFunc {
 	// 関数を返す
 	return func(w http.ResponseWriter, r *http.Request) {
-		// 遅延評価
-		defer r.Body.Close()
 		// 一括読み込み
-		body, err := ioutil.ReadAll(r.Body)
+		body, err := io.ReadAll(r.Body)
 		// エラー処理
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
@@ -158,25 +155,8 @@ func Update() http.HandlerFunc {
 			return
 		}
 
-		user, err := model.Update(userID, req.Name)
+		model.Update(userID, req.Name)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(err.Error()))
-			return
-		}
-
-		res, err := json.Marshal(
-			UserUpdateResponse{
-				ID:   user.ID,
-				Name: user.Name,
-			},
-		)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(err.Error()))
-			return
-		}
-		if _, err := w.Write(res); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
 			return
@@ -205,11 +185,6 @@ type (
 	}
 
 	UserUpdateRequest struct {
-		ID   int    `json:"id"`
-		Name string `json:"name"`
-	}
-
-	UserUpdateResponse struct {
 		ID   int    `json:"id"`
 		Name string `json:"name"`
 	}
