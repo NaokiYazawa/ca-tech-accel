@@ -34,7 +34,7 @@ func Find(id int) (User, error) {
 // Update ユーザ更新
 // update には id と name が必要
 // error のみを返す
-func Update(id int, name string) (error) {
+func Update(id int, name string) error {
 	user := User{ID: id, Name: name}
 	userMap[id] = user
 	return nil
