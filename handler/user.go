@@ -2,11 +2,11 @@ package handler
 
 import (
 	"encoding/json"
+	"io"
 	"path/filepath"
 	"strconv"
 	"strings"
 
-	"io/ioutil"
 	"net/http"
 
 	"github.com/karamaru-alpha/ca-tech-accel/model"
@@ -15,8 +15,7 @@ import (
 // Add 新規ユーザ登録
 func Add() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		defer r.Body.Close()
-		body, err := ioutil.ReadAll(r.Body)
+		body, err := io.ReadAll(r.Body)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte(err.Error()))
@@ -127,6 +126,46 @@ func Find() http.HandlerFunc {
 	}
 }
 
+// Update ユーザー更新
+func Update() http.HandlerFunc {
+	// 関数を返す
+	return func(w http.ResponseWriter, r *http.Request) {
+		// 一括読み込み
+		body, err := io.ReadAll(r.Body)
+		// エラー処理
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(err.Error()))
+			return
+		}
+		var req UserUpdateRequest
+		// json.Marshalは構造体をjsonに変換する
+		if err := json.Unmarshal(body, &req); err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(err.Error()))
+			return
+		}
+		// idを取得
+		sub := strings.TrimPrefix(r.URL.Path, "/user/update")
+		_, id := filepath.Split(sub)
+		userID, err := strconv.Atoi(id)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(err.Error()))
+			return
+		}
+
+		model.Update(userID, req.Name)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+	}
+}
+
 type (
 	SignupRequest struct {
 		Name string `json:"name"`
@@ -141,6 +180,11 @@ type (
 	}
 
 	UserFindResponse struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+	}
+
+	UserUpdateRequest struct {
 		ID   int    `json:"id"`
 		Name string `json:"name"`
 	}
