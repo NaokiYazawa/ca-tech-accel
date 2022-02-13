@@ -13,6 +13,7 @@ import (
 )
 
 // Add 新規ユーザ登録
+// 1つのアクセスごとに1つのgo routine
 func Add() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		body, err := io.ReadAll(r.Body)
